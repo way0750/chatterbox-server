@@ -1,3 +1,5 @@
+var dataBase = {results: [{ createdAt : new Date(), objectId: '1', username : 'fred', text: 'test', roomname: '4chan'}, {objectId: '2', username : 'fred', text: 'test1', roomname: '4chan'}]};
+
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -34,33 +36,43 @@ module.exports = requestHandler = function(request, response) {
 
   console.log("Serving request type " + request.method + " for url " + request.url);
   console.log(request.method);
+  if(request.method === 'POST'){
+    request.on('data', function(data){
+      data = JSON.parse(data);
+      data.objectId = Math.random();
+      data.createdAt = new Date();
+      dataBase.results.push(data);
+    });
+    var headers = defaultCorsHeaders; 
+    headers['Content-Type'] = "application/json";
+    response.writeHead(201, headers);
+    response.end('done');
+  } else {
+    // The outgoing status.
+    var statusCode = 200;
   
-  // The outgoing status.
-  var statusCode = 200;
-
-  // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
-
-  // Tell the client we are sending them plain text.
-  //
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "application/json";
-
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
-  var result = {results: [{ createdAt : new Date(), objectId: '1', username : 'fred', text: 'test', roomname: '4chan'}, {objectId: '2', username : 'fred', text: 'test1', roomname: '4chan'}]}
-
-  response.write(JSON.stringify(result));
-  // Make sure to always call response.end() - Node may not send
-  // anything back to the client until you do. The string you pass to
-  // response.end() will be the body of the response - i.e. what shows
-  // up in the browser.
-  //
-  // Calling .end "flushes" the response's internal buffer, forcing
-  // node to actually send all the data over to the client.
-  response.end()
+    // See the note below about CORS headers.
+    var headers = defaultCorsHeaders;
+  
+    // Tell the client we are sending them plain text.
+    //
+    // You will need to change this if you are sending something
+    // other than plain text, like JSON or HTML.
+    headers['Content-Type'] = "application/json";
+  
+    // .writeHead() writes to the request line and headers of the response,
+    // which includes the status and all headers.
+    response.writeHead(statusCode, headers);
+  
+    response.write(JSON.stringify(dataBase));
+    // Make sure to always call response.end() - Node may not send
+    // anything back to the client until you do. The string you pass to
+    // response.end() will be the body of the response - i.e. what shows
+    // up in the browser.
+    //
+    // Calling .end "flushes" the response's internal buffer, forcing
+    // node to actually send all the data over to the client.
+    response.end()}
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).

@@ -140,7 +140,7 @@ app = {
       app.$text = $('#message');
 
       app.loadMsgs();
-      setInterval (app.loadMsgs.bind(app), 1000);
+      setInterval (app.loadMsgs.bind(app), 30000);
 
       $('#send').on('submit', app.handleSubmit);
     },
