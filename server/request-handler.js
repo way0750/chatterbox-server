@@ -50,7 +50,7 @@ module.exports = requestHandler = function(request, response) {
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
   response.writeHead(statusCode, headers);
-  var result = {results: [{username : 'fred', text: 'test', roomname: '4chan'}, {username : 'fred', text: 'test1', roomname: '4chan'}]}
+  var result = {results: [{ createdAt : new Date(), objectId: '1', username : 'fred', text: 'test', roomname: '4chan'}, {objectId: '2', username : 'fred', text: 'test1', roomname: '4chan'}]}
 
   response.write(JSON.stringify(result));
   // Make sure to always call response.end() - Node may not send
