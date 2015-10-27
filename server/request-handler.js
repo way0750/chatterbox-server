@@ -1,4 +1,17 @@
-var dataBase = {results: []};
+var dataBase = {results: [{username : 'god', createdAt : new Date(), objectId : 123, text : 'file system'}]};
+
+
+
+var fs = require('fs')
+var toFile = JSON.stringify(dataBase)
+
+fs.writeFile('./db.txt', toFile, function () {})
+
+fs.readFile('./db.txt', 'utf8', function (err, data) {
+
+})
+
+
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -40,6 +53,7 @@ module.exports.requestHandler = function(request, response) {
       data.createdAt = new Date();
       dataBase.results.push(data);
     });
+    fs.writeFile('./db.txt', JSON.stringify(dataBase), function () {})
     headers['Content-Type'] = "application/json";
     request.on('end', function(){
       response.writeHead(statusCode, headers);
@@ -61,7 +75,10 @@ module.exports.requestHandler = function(request, response) {
   } else if (request.method === 'GET' && /classes/.test(request.url)) {
     headers['Content-Type'] = "application/json";
     response.writeHead(200, headers);
-    response.end(JSON.stringify(dataBase));
+    fs.readFile('./db.txt', 'utf8', function (err, data) {
+      response.end(data)
+    });
+    // response.end(JSON.stringify(dataBase));
   }else if (request.method === 'GET' && /classes/.test(request.url)) {
     headers['Content-Type'] = "application/json";
     response.writeHead(200, headers);
