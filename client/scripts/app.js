@@ -55,7 +55,9 @@ var app = {
   },
 
   fetch: function(animate) {
-    $.ajax({
+    debugger;
+
+    var ccc = $.ajax({
       url: app.server,
       type: 'GET',
       contentType: 'application/json',
@@ -84,6 +86,7 @@ var app = {
         console.error('chatterbox: Failed to fetch messages');
       }
     });
+  debugger;
   },
 
   clearMessages: function() {

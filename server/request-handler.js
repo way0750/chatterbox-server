@@ -32,7 +32,7 @@ module.exports.requestHandler = function(request, response) {
 
   /**************************POSTS*********************/
 
-  if(request.method === 'POST' && request.url === '/classes/messages'){
+  if(request.method === 'POST' && /classes/.test(request.url)){
     statusCode = 201;
     request.on('data', function(data){
       data = JSON.parse(data);
@@ -45,7 +45,7 @@ module.exports.requestHandler = function(request, response) {
       response.writeHead(statusCode, headers);
       response.end(JSON.stringify(dataBase));
     });
-  } else if (request.method === 'POST' && request.url === '/classes/room1'){
+  } else if (request.method === 'POST' && /classes/.test(request.url)){
     statusCode = 201;
     request.on('data', function(data){
       data = JSON.parse(data);
@@ -58,13 +58,20 @@ module.exports.requestHandler = function(request, response) {
       response.writeHead(statusCode, headers);
       response.end(JSON.stringify(dataBase));
     });
-  } else if (request.method === 'GET' && request.url === '/classes/messages') {
+  } else if (request.method === 'GET' && /classes/.test(request.url)) {
+    headers['Content-Type'] = "application/json";
     response.writeHead(200, headers);
     response.end(JSON.stringify(dataBase));
-  }else if (request.method === 'GET' && request.url === '/classes/room1') {
+  }else if (request.method === 'GET' && /classes/.test(request.url)) {
+    headers['Content-Type'] = "application/json";
     response.writeHead(200, headers);
     response.end(JSON.stringify(dataBase));
-  } else {
+  } else if (request.method === "OPTIONS"){
+    response.writeHead(200, headers);
+    response.end();
+  }
+  else {
+    headers['Content-Type'] = "application/json";
     response.writeHead(404, headers);
     response.end();
   }
